@@ -1,0 +1,56 @@
+import tkinter
+from tkinter import colorchooser
+
+print("Pour dessiner, déplace ta souris en appuyant sur le bouton gauche")
+print("Pour changer de couleur, clique sur une des couleurs.")
+
+fenêtre = tkinter.Tk()
+canvas = tkinter.Canvas(fenêtre, width=750, height=500, bg="white")
+canvas.pack()
+dernierX, dernierY = 0,0
+current_color = tkinter.StringVar()
+current_color.set("black")
+
+def enregistrer_position(event):
+    global dernierX, dernierY
+    dernierX = event.x
+    dernierY = event.y
+
+def quand_déplacé(event):
+    canvas.create_line(dernierX, dernierY, event.x, event.y, fill = current_color.get(), width= 2)
+    enregistrer_position(event)
+
+canvas.bind("<Button-1>", enregistrer_position)
+canvas.bind("<B1-Motion>", quand_déplacé)
+
+def définir_couleur_rouge(event):
+    current_color.set("red")
+
+def définir_couleur_bleu(event):
+    current_color.set("blue")
+
+def définir_couleur_noir(event):
+    current_color.set("black")
+
+def définir_couleur_vert(event):
+    current_color.set("green")
+
+def choose_color():
+    color = colorchooser.askcolor()[1]
+    if color:
+        current_color.set(color)
+
+red_id = canvas.create_rectangle(10, 10, 30, 30, fill="red")
+blue_id = canvas.create_rectangle(10, 35, 30, 55, fill="blue")
+black_id = canvas.create_rectangle(10, 60, 30, 80, fill="black")
+green_id = canvas.create_rectangle(10, 85, 30, 105, fill="green")
+
+canvas.tag_bind(red_id, "<Button-1>", définir_couleur_rouge)
+canvas.tag_bind(blue_id, "<Button-1>", définir_couleur_bleu) 
+canvas.tag_bind(black_id, "<Button-1>", définir_couleur_noir)
+canvas.tag_bind(green_id, "<Button-1>", définir_couleur_vert)
+
+color_button = tkinter.Button(fenêtre, text="Choose Color", command=choose_color)
+color_button.pack(fill=tkinter.BOTH, expand=True)
+
+fenêtre.mainloop()
